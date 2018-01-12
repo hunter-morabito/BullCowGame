@@ -16,7 +16,8 @@ int main()
 	PrintIntro();
 	
 	// play the game at least once
-	do {
+	do 
+	{
 		PlayGame();
 	}while(AskToPlayAgain());
 	
@@ -27,29 +28,31 @@ int main()
 void PrintIntro()
 {
 	// introduce the game
-	constexpr int WORD_LENGTH = 5;
-
 	std::cout << "Welcome to Bulls and Cows" << std::endl;
-	std::cout << "Try and guess the " << WORD_LENGTH;
+	std::cout << "Try and guess the " << BCGame.GetHiddenWordLength();;
 	std::cout << " letter isogram I'm thinking of." << std::endl;
 }
 
 void PlayGame()
 {
-	int MaxTries = BCGame.GetMaxTries();
+	int32 MaxTries = BCGame.GetMaxTries();
 
 	// loop for the number of turns asking for guesses
-	constexpr int MaxTries = 5;
-	for (int i = 0; i < MaxTries; i++)
+	for (int32 i = 0; i < MaxTries; i++)
 	{
 		FText Guess = GetGuess(); // TODO make loop checking valid
+
+		// submit valid guess to game
+		FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
+		std::cout << "Bulls = " << BullCowCount.Bulls << std::endl;
+		std::cout << "Cows = " << BullCowCount.Bulls << std::endl;
 		std::cout << "Your guess was: " << Guess << std::endl;
 	}
 }
 
 FText GetGuess() 
 {
-	int CurrentTry = BCGame.GetCurrentTry();
+	int32 CurrentTry = BCGame.GetCurrentTry();
 
 	std::cout << "Try " << CurrentTry << ". Enter your guess: ";
 	// get a guess from the player
