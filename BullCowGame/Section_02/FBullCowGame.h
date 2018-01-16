@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+
 using FString = std::string;
 using int32 = int;
 
@@ -46,4 +47,6 @@ private:
 	int32 MyMaxTries;
 	FString MyHiddenWord;
 	bool bGameWon;
+	
+	bool IsIsogram(FString)const;
 };
