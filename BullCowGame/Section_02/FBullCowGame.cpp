@@ -1,3 +1,5 @@
+#pragma once
+
 #include "FBullCowGame.h"
 #include <map>
 #define TMap std::map
@@ -6,9 +8,6 @@ FBullCowGame::FBullCowGame() { Reset(); }
 
 void FBullCowGame::Reset()
 {
-	constexpr int32 MAX_TRY = 8;
-	MyMaxTries = MAX_TRY;
-
 	const FString HIDDEN_WORD = "planet";
 	MyHiddenWord = HIDDEN_WORD;
 
@@ -19,7 +18,12 @@ void FBullCowGame::Reset()
 	return;
 }
 
-int32 FBullCowGame::GetMaxTries() const{ return MyMaxTries; }
+// returns the max tries based on the word length to scale difficulty
+int32 FBullCowGame::GetMaxTries() const{ 
+	TMap<int32, int32> WordLengthToMaxTries{ {3,4},{4,7},{5,10},{6,16} };
+	return WordLengthToMaxTries[MyHiddenWord.length()];
+}
+
 int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
 int32 FBullCowGame::GetHiddenWordLength() const { return MyHiddenWord.length(); }
 bool FBullCowGame::IsGameWon() const { return bGameWon; }
@@ -30,7 +34,7 @@ EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 	{
 		return EGuessStatus::Not_Isogram;
 	}
-	else if (IsIsogram(Guess))
+	else if (!IsLowercase(Guess))
 	{
 		return EGuessStatus::Not_Lowercase;
 	}
@@ -85,14 +89,14 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
 
 // Private Functions 
 
-bool FBullCowGame::IsIsogram(FString Guess) const
+bool FBullCowGame::IsIsogram(FString Word) const
 {
 	// treat 0 and 1 letter strings as isograms
-	if (Guess.length() <= 1) { return true; }
+	if (Word.length() <= 1) { return true; }
 
 	TMap<char, bool> LetterSeen;
 	// range based loop
-	for (auto Letter : Guess) // for all letters of  the word
+	for (auto Letter : Word) // for all letters of  the word
 	{
 		Letter = tolower(Letter); // handle mixed cases
 		if (LetterSeen[Letter]){
@@ -101,5 +105,18 @@ bool FBullCowGame::IsIsogram(FString Guess) const
 			LetterSeen[Letter] = true;
 		}
 	}
-	return false;
+	return true;
+}
+
+bool FBullCowGame::IsLowercase(FString Word) const
+{
+	if (Word.length() == 0 || Word == " " || Word == "\0") { return false; }
+
+	for (auto Letter : Word)
+	{
+		if (!islower(Letter)) {
+			return false;
+		}
+	}
+	return true;
 }

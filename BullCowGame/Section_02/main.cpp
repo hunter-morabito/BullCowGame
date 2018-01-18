@@ -6,6 +6,9 @@ user interaction. For game logic see the FBullCowGame class.
 #include <iostream>
 #include "FBullCowGame.h"
 
+// TODO polish
+
+// function prototypes as outside a class
 void PrintIntro();
 void PlayGame();
 FString GetValidGuess();
@@ -34,12 +37,12 @@ int main()
 
 void PrintIntro()
 {
-	// introduce the game
 	std::cout << "Welcome to Bulls and Cows" << std::endl;
 	std::cout << "Try and guess the " << BCGame.GetHiddenWordLength();;
 	std::cout << " letter isogram I'm thinking of." << std::endl;
 }
 
+// plays a single game to completion
 void PlayGame()
 {
 	int32 MaxTries = BCGame.GetMaxTries();
@@ -54,9 +57,8 @@ void PlayGame()
 		FBullCowCount BullCowCount = BCGame.SubmitValidGuess(Guess);
 		if (!BCGame.IsGameWon())
 		{
-			std::cout << "Bulls = " << BullCowCount.Bulls << std::endl;
-			std::cout << "Cows = " << BullCowCount.Bulls << std::endl;
-			std::cout << "Your guess was: " << Guess << std::endl;
+			std::cout << "Bulls = " << BullCowCount.Bulls;
+			std::cout << ". Cows = " << BullCowCount.Cows << std::endl;
 		}
 	}
 	PrintGameSummary();
@@ -71,7 +73,8 @@ FText GetValidGuess()
 	
 	do {
 		int32 CurrentTry = BCGame.GetCurrentTry();
-		std::cout << "Try " << CurrentTry << ". Enter your guess: ";
+		std::cout << "Try " << CurrentTry << " of " << BCGame.GetMaxTries();
+		std::cout << ". Enter your guess: ";
 		// get a guess from the player
 		std::getline(std::cin, Guess);
 
@@ -79,14 +82,14 @@ FText GetValidGuess()
 		switch (Status)
 		{
 		case EGuessStatus::Not_Lowercase:
-			std::cout << "Not Lowercase\n";
+			std::cout << "Not Lowercase"<<std::endl;
 			break;
 
 		case EGuessStatus::Not_Isogram:
-			std::cout << "Not and Isogram\n";
+			std::cout << "Not and Isogram"<<std::endl;
 			break;
 		case EGuessStatus::Wrong_Length:
-			std::cout << "Wrong Word Length\n";
+			std::cout << "Wrong Word Length"<<std::endl;
 			break;
 		default:
 			break;
@@ -108,10 +111,10 @@ void PrintGameSummary()
 {
 	if (BCGame.IsGameWon())
 	{
-		std::cout << "YOU WIN!\n";
+		std::cout << "YOU WIN!"<<std::endl;
 	}
 	else 
 	{
-		std::cout << "Better luck next time\n";
+		std::cout << "Better luck next time"<<std::endl;
 	}
 }
